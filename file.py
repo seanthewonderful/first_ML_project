@@ -9,13 +9,17 @@ df = pd.read_csv("https://raw.githubusercontent.com/dataprofessor/data/master/de
 
 # Data separation as x and y
 # y = final column of csv file, titled logS
+# with this data, y encapsulates the solubility values that correspond to various chemical descriptors in the dataset
 y = df['logS']
-# x = remaining columns, axis=1 creates column values, axis=0 creates row values
+# x = remaining columns, axis=1 creates column values, axis=1 tells pandas that I want to drop a column, not a row (axis=0)
 x = df.drop('logS', axis=1)
 
 #  Data splitting
 from sklearn.model_selection import train_test_split
 
+# Conventional code for data splitting to prepare for linear regression. 
+# This creates a training set and a test set with 80% of the data in the training set and 20% in the test set (test_size=0.2)
+# random_state=100 ensures that the data is split in the same way each time the code is run
 X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=100)
 
 # MODEL BUILDING
@@ -23,10 +27,10 @@ X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_
 from sklearn.linear_model import LinearRegression
 
 # Training the model
+# lr becomes our instance of LinearRegression()
 lr = LinearRegression()
+# pass in training data to the model. The model learns the coefficients (parameters) for each feature in X_train that best fit the data based on minimizing the sum of the squares of the residuals (the differences between observed values in the dataset, and the values predicted by the linear approximation)
 lr.fit(X_train, y_train)
-
-LinearRegression()
 
 # Applying the model to make a prediction
 y_lr_train_pred = lr.predict(X_train)
@@ -98,4 +102,4 @@ plt.plot(y_train, p(y_train), color="green")
 plt.ylabel("Predicted LogS")
 plt.xlabel("Experimental LogS")
 
-plt.show()
+# plt.show()
